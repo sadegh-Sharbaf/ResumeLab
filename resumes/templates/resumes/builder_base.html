@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% load static %}
+{% block title %}ویرایش {{ resume.title }}{% endblock %}
+{% block css_files %}<link rel="stylesheet" href="{% static 'css/builder.css' %}">{% endblock %}
+{% block content %}
+<div class="container page-shell">
+    <div class="builder-shell">
+        <aside class="surface builder-sidebar"><h3>{{ resume.title }}</h3><div class="builder-progress"><span>مرحله {{ step_number }} از {{ step_total }}</span><span>{{ resume.completion_percent }}٪ کامل</span></div><div class="progress-track"><span style="width:{% widthratio step_number step_total 100 %}%"></span></div><nav class="step-list">{% for step in steps %}<a class="step-link {% if step.active %}active{% endif %}" href="{{ step.url }}"><span>{{ step.number }}</span><span>{{ step.label }}</span></a>{% endfor %}</nav><div class="divider"></div><div class="button-row"><a class="btn btn-small" href="{% url 'resumes:preview' resume.pk %}">پیش‌نمایش</a><a class="btn btn-small" href="{% url 'resumes:dashboard' %}">داشبورد</a></div></aside>
+        <section class="surface builder-main">{% block builder_content %}{% endblock %}</section>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}<script defer src="{% static 'js/builder.js' %}"></script>{% endblock %}

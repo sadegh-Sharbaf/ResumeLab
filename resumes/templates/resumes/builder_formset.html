@@ -1,0 +1,41 @@
+{% extends 'resumes/builder_base.html' %}
+{% block builder_content %}
+<div class="builder-heading"><div><span class="eyebrow">مرحله {{ step_number }}</span><h1>{{ page_title }}</h1><p>{{ page_description }}</p></div></div>
+<form method="post" novalidate>{% csrf_token %}
+{% for group in formsets %}
+<section class="formset-group" data-formset data-prefix="{{ group.prefix }}">
+    <div class="formset-title-row"><div><h2 class="section-title">{{ group.title }}</h2><p class="formset-hint">افزودن این بخش اختیاری است و ترتیب موارد خودکار ثبت می‌شود.</p></div><button class="btn btn-small" type="button" data-add-form>+ افزودن مورد</button></div>
+    {{ group.formset.management_form }}
+    {% if group.formset.non_form_errors %}<div class="form-errors">{{ group.formset.non_form_errors }}</div>{% endif %}
+    <div class="form-list" data-form-list>
+    {% for item_form in group.formset.forms %}
+        <article class="formset-card {% if item_form.DELETE.value %}is-deleted{% endif %}" data-form-card>
+            {% for hidden in item_form.hidden_fields %}{{ hidden }}{% endfor %}
+            <div class="formset-card-head"><strong data-card-title>مورد {{ forloop.counter }}</strong><button class="remove-form" type="button" data-remove-form>حذف</button></div>
+            {% if item_form.non_field_errors %}<div class="form-errors">{{ item_form.non_field_errors }}</div>{% endif %}
+            <div class="form-grid">
+            {% for field in item_form.visible_fields %}
+                {% if field.name == 'DELETE' %}<div class="delete-field">{{ field }}</div>{% else %}<div class="field {% if field.name == 'description' or field.name == 'achievements' %}field-full{% endif %}" data-field-name="{{ field.name }}">{% if field.field.widget.input_type == 'checkbox' %}<div class="checkbox-row">{{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}</label></div>{% else %}<label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% endif %}{{ field.errors }}</div>{% endif %}
+            {% endfor %}
+            </div>
+        </article>
+    {% empty %}
+        <div class="formset-empty" data-empty-message>هنوز موردی اضافه نشده است.</div>
+    {% endfor %}
+    </div>
+    <template data-empty-form>
+        <article class="formset-card" data-form-card>
+            {% for hidden in group.formset.empty_form.hidden_fields %}{{ hidden }}{% endfor %}
+            <div class="formset-card-head"><strong data-card-title>مورد جدید</strong><button class="remove-form" type="button" data-remove-form>حذف</button></div>
+            <div class="form-grid">
+            {% for field in group.formset.empty_form.visible_fields %}
+                {% if field.name == 'DELETE' %}<div class="delete-field">{{ field }}</div>{% else %}<div class="field {% if field.name == 'description' or field.name == 'achievements' %}field-full{% endif %}" data-field-name="{{ field.name }}">{% if field.field.widget.input_type == 'checkbox' %}<div class="checkbox-row">{{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}</label></div>{% else %}<label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% endif %}</div>{% endif %}
+            {% endfor %}
+            </div>
+        </article>
+    </template>
+</section>
+{% endfor %}
+<div class="builder-actions"><a class="btn" href="{% url 'resumes:dashboard' %}">ذخیره بعداً</a><div><button class="btn btn-primary" type="submit">ذخیره و مرحله بعد</button></div></div>
+</form>
+{% endblock %}

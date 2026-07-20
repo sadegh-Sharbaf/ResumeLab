@@ -1,0 +1,170 @@
+<article class="resume-document theme-{{ resume.template }}{% if pdf_mode %} pdf-document{% endif %}" style="--resume-accent:{{ resume.accent_color }}" dir="{% if resume.language == 'fa' %}rtl{% else %}ltr{% endif %}">
+    <div class="resume-layout">
+        <aside class="resume-sidebar">
+            <div class="resume-identity">
+                {% if pdf_mode and avatar_uri %}
+                    <img class="resume-avatar" src="{{ avatar_uri }}" alt="{{ resume.full_name }}">
+                {% elif resume.avatar %}
+                    <img class="resume-avatar" src="{{ resume.avatar.url }}" alt="{{ resume.full_name }}">
+                {% else %}
+                    <div class="resume-avatar resume-avatar-fallback">{{ resume.full_name|slice:':1' }}</div>
+                {% endif %}
+                <h1 class="resume-name">{{ resume.full_name }}</h1>
+                {% if resume.job_title %}<p class="resume-job">{{ resume.job_title }}</p>{% endif %}
+            </div>
+
+            <div class="resume-side-content">
+                <section class="sidebar-section">
+                    <h3>اطلاعات تماس</h3>
+                    <div class="contact-list">
+                        {% if resume.location %}<span><b>⌖</b> {{ resume.location }}</span>{% endif %}
+                        {% if resume.email and resume.show_email %}<a href="mailto:{{ resume.email }}"><b>✉</b> {{ resume.email }}</a>{% endif %}
+                        {% if resume.phone and resume.show_phone %}<a href="tel:{{ resume.phone }}"><b>☎</b> {{ resume.phone }}</a>{% endif %}
+                        {% if resume.alternate_phone and resume.show_phone %}<a href="tel:{{ resume.alternate_phone }}"><b>☎</b> {{ resume.alternate_phone }}</a>{% endif %}
+                        {% if resume.website %}<a href="{{ resume.website }}" target="_blank" rel="noopener"><b>↗</b> وب‌سایت</a>{% endif %}
+                    </div>
+                </section>
+
+                {% if resume.birth_date or resume.marital_status or resume.military_status and resume.military_status != 'unset' %}
+                <section class="sidebar-section personal-section">
+                    <h3>مشخصات فردی</h3>
+                    <div class="personal-list">
+                        {% if resume.birth_date %}<div><span>تولد</span><strong>{{ resume.birth_date_display }}</strong></div>{% endif %}
+                        {% if resume.marital_status %}<div><span>تأهل</span><strong>{{ resume.get_marital_status_display }}</strong></div>{% endif %}
+                        {% if resume.military_status and resume.military_status != 'unset' %}<div><span>سربازی</span><strong>{{ resume.get_military_status_display }}</strong></div>{% endif %}
+                    </div>
+                </section>
+                {% endif %}
+
+                {% if resume.skills.all %}
+                <section class="sidebar-section technical-skills">
+                    <h3>مهارت‌های فنی</h3>
+                    {% for skill in resume.skills.all %}
+                    <div class="skill-row">
+                        <div class="skill-row-head"><span>{{ skill.name }}</span><span>{{ skill.get_level_display }}</span></div>
+                        <div class="skill-bar"><span style="width:{{ skill.percentage }}%"></span></div>
+                    </div>
+                    {% endfor %}
+                </section>
+                {% endif %}
+
+                {% if resume.languages.all %}
+                <section class="sidebar-section">
+                    <h3>زبان‌ها</h3>
+                    {% for language in resume.languages.all %}<div class="language-row"><span>{{ language.name }}</span><strong>{{ language.level }}</strong></div>{% endfor %}
+                </section>
+                {% endif %}
+
+                {% if resume.social_links.all %}
+                <section class="sidebar-section">
+                    <h3>شبکه‌های اجتماعی</h3>
+                    <div class="social-list">{% for link in resume.social_links.all %}<a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.platform }} <b>↗</b></a>{% endfor %}</div>
+                </section>
+                {% endif %}
+            </div>
+        </aside>
+
+        <main class="resume-main">
+            {% if resume.summary %}
+            <section class="resume-section summary-section">
+                <h2>خلاصه حرفه‌ای</h2>
+                <p class="resume-summary">{{ resume.summary|linebreaksbr }}</p>
+            </section>
+            {% endif %}
+
+            {% if resume.experiences.all %}
+            <section class="resume-section">
+                <h2>سوابق شغلی</h2>
+                <div class="timeline">
+                    {% for item in resume.experiences.all %}
+                    <article class="timeline-item">
+                        <div class="timeline-top">
+                            <div class="timeline-heading">
+                                <h3>{{ item.role }}</h3>
+                                <h4>{{ item.company }}{% if item.location %} — {{ item.location }}{% endif %}</h4>
+                            </div>
+                            {% if item.date_range_display %}<span class="timeline-date">{{ item.date_range_display }}</span>{% endif %}
+                        </div>
+                        {% if item.description %}<p class="timeline-description">{{ item.description|linebreaksbr }}</p>{% endif %}
+                        {% if item.achievement_lines %}
+                            <h5 class="item-subtitle">وظایف و دستاوردها</h5>
+                            <ul class="resume-bullets">{% for line in item.achievement_lines %}<li>{{ line }}</li>{% endfor %}</ul>
+                        {% endif %}
+                    </article>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if resume.educations.all %}
+            <section class="resume-section education-section">
+                <h2>سوابق تحصیلی</h2>
+                <div class="timeline">
+                    {% for item in resume.educations.all %}
+                    <article class="timeline-item education-item">
+                        <div class="timeline-top">
+                            <div class="timeline-heading">
+                                <h3>{{ item.degree }}{% if item.field %} — {{ item.field }}{% endif %}</h3>
+                                <h4>{{ item.institution }}{% if item.location %} — {{ item.location }}{% endif %}</h4>
+                            </div>
+                            {% if item.date_range_display %}<span class="timeline-date">{{ item.date_range_display }}</span>{% endif %}
+                        </div>
+                        <div class="education-meta">{% if item.grade %}<span>معدل: <strong>{{ item.grade }}</strong></span>{% endif %}</div>
+                        {% if item.description %}<p class="timeline-description">{{ item.description|linebreaksbr }}</p>{% endif %}
+                    </article>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if resume.projects.all %}
+            <section class="resume-section projects-section">
+                <h2>پروژه‌ها</h2>
+                <div class="project-grid">
+                    {% for project in resume.projects.all %}
+                    <article class="resume-project">
+                        <div class="project-top">
+                            <div><h3>{{ project.title }}</h3>{% if project.client %}<p class="project-client">کارفرما / درخواست‌کننده: {{ project.client }}</p>{% endif %}</div>
+                            {% if project.project_date_display %}<span class="project-date">{{ project.project_date_display }}</span>{% endif %}
+                        </div>
+                        {% if project.tech_stack %}<span class="tag">{{ project.tech_stack }}</span>{% endif %}
+                        {% if project.detail_lines %}<ul class="resume-bullets project-bullets">{% for line in project.detail_lines %}<li>{{ line }}</li>{% endfor %}</ul>{% endif %}
+                        <div class="resume-project-links">{% if project.url %}<a href="{{ project.url }}">مشاهده دمو ↗</a>{% endif %}{% if project.github_url %}<a href="{{ project.github_url }}">کد پروژه ↗</a>{% endif %}</div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if resume.certificates.all %}
+            <section class="resume-section">
+                <h2>دوره‌ها و گواهینامه‌ها</h2>
+                <div class="certificate-list">
+                {% for certificate in resume.certificates.all %}
+                    <article class="certificate-item">
+                        <div><strong>{{ certificate.title }}</strong>{% if certificate.issuer %}<span> — {{ certificate.issuer }}</span>{% endif %}</div>
+                        {% if certificate.issue_date_display %}<span class="certificate-date">{{ certificate.issue_date_display }}</span>{% endif %}
+                        {% if certificate.description %}<p>{{ certificate.description|linebreaksbr }}</p>{% endif %}
+                        {% if certificate.credential_url %}<a href="{{ certificate.credential_url }}">مشاهده مدرک ↗</a>{% endif %}
+                    </article>
+                {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if resume.soft_skills.all %}
+            <section class="resume-section compact-section">
+                <h2>مهارت‌های نرم</h2>
+                <div class="chip-list">{% for item in resume.soft_skills.all %}<span class="resume-chip">{{ item.name }}</span>{% endfor %}</div>
+            </section>
+            {% endif %}
+
+            {% if resume.interests.all %}
+            <section class="resume-section compact-section">
+                <h2>علاقه‌مندی‌ها</h2>
+                <div class="chip-list">{% for item in resume.interests.all %}<span class="resume-chip interest-chip">{{ item.name }}</span>{% endfor %}</div>
+            </section>
+            {% endif %}
+        </main>
+    </div>
+</article>

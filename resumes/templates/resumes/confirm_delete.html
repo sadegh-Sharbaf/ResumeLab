@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block title %}حذف رزومه{% endblock %}
+{% block content %}<section class="auth-shell"><div class="surface auth-card"><span class="eyebrow">عملیات غیرقابل بازگشت</span><h1>حذف «{{ resume.title }}»؟</h1><p class="muted">همه سوابق، مهارت‌ها، پروژه‌ها و لینک عمومی این رزومه حذف می‌شوند.</p><form method="post" class="button-row">{% csrf_token %}<button class="btn btn-danger" type="submit">بله، حذف شود</button><a class="btn" href="{% url 'resumes:dashboard' %}">انصراف</a></form></div></section>{% endblock %}

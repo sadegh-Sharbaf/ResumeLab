@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% load static %}
+{% block title %}رزومه {{ resume.full_name }}{% endblock %}
+{% block css_files %}<link rel="stylesheet" href="{% static 'css/resume.css' %}">{% endblock %}
+{% block content %}
+{% if is_preview %}<div class="preview-banner"><div class="container"><span>این پیش‌نمایش خصوصی است؛ وضعیت فعلی: {{ resume.get_status_display }} / {{ resume.get_visibility_display }}</span><a class="btn btn-small btn-primary" href="{% url 'resumes:builder_design' resume.pk %}">ویرایش انتشار</a></div></div>{% endif %}
+<div class="container public-resume-shell">
+    <div class="resume-toolbar"><div><strong>{{ resume.title }}</strong> <span class="share-note">• {{ resume.views_count }} بازدید</span></div><div class="button-row">{% if request.user.is_authenticated and request.user.id == resume.user_id %}<a class="btn btn-small" href="{% url 'resumes:builder_basic' resume.pk %}">ویرایش</a>{% endif %}<a class="btn btn-small btn-primary" href="{% url 'resumes:pdf' resume.slug %}">دانلود PDF</a></div></div>
+    {% include 'resumes/_resume_document.html' with pdf_mode=False %}
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% load static %}
+{% block title %}درباره ResumeLab{% endblock %}
+{% block css_files %}<link rel="stylesheet" href="{% static 'css/about.css' %}">{% endblock %}
+{% block content %}
+<div class="container page-shell">
+    <section class="about-hero"><span class="eyebrow">درباره پروژه</span><h1>از یک Portfolio شخصی تا <span class="gradient-text">پلتفرم رزومه‌ساز</span></h1><p>ResumeLab برای نمایش رزومه شخصی سازنده، ساخت رزومه کاربران، دریافت PDF و انتشار اختیاری رزومه‌ها طراحی شده است.</p></section>
+    <div class="about-grid">
+        <article class="surface about-card"><h2>هدف محصول</h2><p>کاربر بدون درگیری با طراحی، اطلاعات حرفه‌ای خود را در چند مرحله وارد می‌کند و یک صفحه آنلاین و فایل PDF منظم دریافت می‌کند.</p></article>
+        <article class="surface about-card"><h2>حریم خصوصی</h2><p>هر رزومه به‌صورت پیش‌فرض خصوصی است. کاربر می‌تواند آن را فقط با لینک یا عمومی کند و نمایش در Explore نیز انتخابی است.</p></article>
+        <article class="surface about-card"><h2>معماری</h2><ul><li>چند رزومه برای هر کاربر</li><li>بخش‌های مستقل و قابل توسعه</li><li>قالب و رنگ جدا برای هر رزومه</li><li>خروجی PDF مبتنی بر HTML/CSS</li></ul></article>
+        <article class="surface about-card"><h2>مسیر استفاده</h2><div class="roadmap"><div class="roadmap-item"><div><strong>ساخت حساب</strong><p>ورود با نام کاربری، ایمیل یا تلفن.</p></div></div><div class="roadmap-item"><div><strong>تکمیل فرم‌ها</strong><p>ذخیره در پایان هر مرحله.</p></div></div><div class="roadmap-item"><div><strong>انتخاب قالب</strong><p>مدرن، مینیمال یا کلاسیک.</p></div></div><div class="roadmap-item"><div><strong>انتشار و PDF</strong><p>کنترل کامل روی دسترسی.</p></div></div></div></article>
+    </div>
+</div>
+{% endblock %}

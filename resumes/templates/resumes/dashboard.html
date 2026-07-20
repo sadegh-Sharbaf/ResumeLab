@@ -1,0 +1,30 @@
+{% extends 'base.html' %}{% load static %}
+{% block title %}داشبورد رزومه‌ها{% endblock %}
+{% block css_files %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">{% endblock %}
+{% block content %}
+<div class="container page-shell">
+    <div class="page-heading"><div><span class="eyebrow">داشبورد</span><h1>رزومه‌های من</h1><p>برای هر موقعیت شغلی یک نسخه جدا بساز، پیش‌نمایش بگیر و دسترسی‌اش را کنترل کن.</p></div><a class="btn btn-primary" href="{% url 'resumes:create' %}">+ رزومه جدید</a></div>
+    {% if resumes %}
+    <div class="dashboard-stats"><div class="surface stat-card"><strong>{{ resumes|length }}</strong><span>تعداد رزومه‌ها</span></div><div class="surface stat-card"><strong>{% widthratio resumes|length 1 1 %}</strong><span>قابل ویرایش در هر زمان</span></div><div class="surface stat-card"><strong>PDF</strong><span>خروجی آماده دانلود</span></div></div>
+    <div class="resume-list">
+        {% for resume in resumes %}
+        <article class="surface resume-dashboard-card">
+            <div class="resume-card-main">
+                <div class="resume-title-row"><h2>{{ resume.title }}</h2><span class="status-badge status-{{ resume.status }}">{{ resume.get_status_display }}</span><span class="tag">{{ resume.get_visibility_display }}</span></div>
+                <div><strong>{{ resume.full_name }}</strong> <span class="muted">— {{ resume.job_title|default:'عنوان شغلی وارد نشده' }}</span></div>
+                <div class="completion"><div class="progress-track"><span style="width:{{ resume.completion_percent }}%"></span></div><b>{{ resume.completion_percent }}٪</b></div>
+                <div class="resume-card-meta"><span>به‌روزرسانی: {{ resume.updated_at|date:'Y/m/d H:i' }}</span><span>{{ resume.views_count }} بازدید</span><span>{{ resume.downloads_count }} دانلود</span></div>
+            </div>
+            <div class="resume-card-actions">
+                <a class="btn btn-small btn-primary" href="{% url 'resumes:builder_basic' resume.pk %}">ویرایش</a>
+                <a class="btn btn-small" href="{% url 'resumes:preview' resume.pk %}">پیش‌نمایش</a>
+                {% if resume.status == 'published' and resume.visibility != 'private' %}<a class="btn btn-small" href="{{ resume.get_absolute_url }}">لینک عمومی</a>{% endif %}
+                <form method="post" action="{% url 'resumes:duplicate' resume.pk %}">{% csrf_token %}<button class="btn btn-small" type="submit">کپی</button></form>
+                <a class="btn btn-small btn-danger" href="{% url 'resumes:delete' resume.pk %}">حذف</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}<div class="surface empty-state"><h2>هنوز رزومه‌ای نساخته‌ای</h2><p>اولین رزومه را ایجاد کن؛ اطلاعات در پایان هر مرحله ذخیره می‌شود.</p><a class="btn btn-primary" href="{% url 'resumes:create' %}">ساخت اولین رزومه</a></div>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="{{ resume.language }}" dir="{% if resume.language == 'fa' %}rtl{% else %}ltr{% endif %}">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<title>رزومه {{ resume.full_name }}</title>
+<style>
+{{ pdf_css|safe }}
+@page{size:A4;margin:0}
+*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+html,body{margin:0!important;padding:0!important;width:210mm;color:#182033;background:linear-gradient(to left,#111827 0,#111827 68mm,#fff 68mm,#fff 100%)!important}
+body{font-family:Tahoma,"Segoe UI","DejaVu Sans",sans-serif!important}
+.resume-document.pdf-document{width:210mm;min-height:0;border-radius:0;box-shadow:none;overflow:visible;margin:0;font-size:8.7pt}
+.resume-document.pdf-document .resume-layout{grid-template-columns:68mm minmax(0,142mm);min-height:0;align-items:stretch}
+.resume-document.pdf-document .resume-sidebar{display:block!important;grid-template-columns:none!important;padding:11mm 7mm;overflow:hidden;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.resume-document.pdf-document .resume-main{padding:11mm 8mm;background:#fff}
+.resume-document.pdf-document .resume-avatar{width:31mm;height:35mm;border-radius:8mm;border-width:1.2mm;margin-bottom:4mm}
+.resume-document.pdf-document .resume-avatar-fallback{line-height:35mm;font-size:24pt}
+.resume-document.pdf-document .resume-name,.resume-document.pdf-document .resume-job{text-align:center!important}.resume-document.pdf-document .resume-avatar{margin-left:auto!important;margin-right:auto!important}.resume-document.pdf-document .resume-name{font-size:17pt}
+.resume-document.pdf-document .resume-job{font-size:8.6pt;margin:1.5mm 0 5mm}
+.resume-document.pdf-document .sidebar-section{margin-top:4.2mm}
+.resume-document.pdf-document .sidebar-section h3{font-size:8.8pt;padding-bottom:1.5mm;margin-bottom:2.3mm}
+.resume-document.pdf-document .contact-list,.resume-document.pdf-document .social-list{font-size:7.1pt;gap:1.5mm}
+.resume-document.pdf-document .personal-list{gap:1.3mm}
+.resume-document.pdf-document .personal-list>div{font-size:7.1pt}
+.resume-document.pdf-document .technical-skills{column-count:1!important}.resume-document.pdf-document .skill-row{margin-bottom:1.25mm}
+.resume-document.pdf-document .skill-row-head{display:block;font-size:6.8pt;margin-bottom:.7mm;line-height:1.35}.resume-document.pdf-document .skill-row-head span{display:block;max-width:100%;overflow-wrap:anywhere}.resume-document.pdf-document .skill-row-head span:last-child{display:none}.resume-document.pdf-document .resume-sidebar *{min-width:0}.resume-document.pdf-document .contact-list a,.resume-document.pdf-document .contact-list span,.resume-document.pdf-document .social-list a{display:block;max-width:100%;overflow-wrap:anywhere}
+.resume-document.pdf-document .skill-bar{height:1.25mm}
+.resume-document.pdf-document .language-row{font-size:7.2pt;margin:1.3mm 0}
+.resume-document.pdf-document .resume-section{margin-bottom:4.8mm}.resume-document.pdf-document .education-section{break-inside:avoid-page}
+.resume-document.pdf-document .resume-section h2{font-size:12pt;gap:2mm;margin-bottom:3mm}
+.resume-document.pdf-document .resume-section h2:before{width:1.8mm;height:6.5mm;border-radius:2mm}
+.resume-document.pdf-document .resume-summary{font-size:8.5pt;line-height:1.9;text-align:justify}
+.resume-document.pdf-document .timeline{gap:3.7mm}
+.resume-document.pdf-document .timeline-item{padding-right:4mm;border-right-width:.45mm;break-inside:avoid-page}
+.resume-document.pdf-document .timeline-item:before{right:-1.5mm;top:1.4mm;width:2.7mm;height:2.7mm}
+.resume-document.pdf-document .timeline-top{gap:3mm;grid-template-columns:minmax(0,1fr) max-content}
+.resume-document.pdf-document .timeline-item h3{font-size:9.4pt;line-height:1.55}
+.resume-document.pdf-document .timeline-item h4{font-size:7.9pt;margin:.5mm 0}
+.resume-document.pdf-document .timeline-date,.resume-document.pdf-document .project-date,.resume-document.pdf-document .certificate-date{font-size:6.5pt;padding:1.1mm 2mm;max-width:35mm}
+.resume-document.pdf-document .timeline-description{font-size:7.6pt;line-height:1.75;margin-top:1.6mm}
+.resume-document.pdf-document .item-subtitle{font-size:7.8pt;margin:2.2mm 0 1.2mm;padding-bottom:1mm}
+.resume-document.pdf-document .resume-bullets{font-size:7.5pt;line-height:1.75;gap:.8mm;padding-right:3.7mm}
+.resume-document.pdf-document .education-meta{font-size:7.3pt;margin-top:1.4mm}
+.resume-document.pdf-document .project-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5mm}
+.resume-document.pdf-document .resume-project{border-radius:3mm;padding:2.4mm;break-inside:avoid-page}
+.resume-document.pdf-document .resume-project h3{font-size:8.8pt}
+.resume-document.pdf-document .project-client{font-size:6.9pt;margin-top:.8mm}
+.resume-document.pdf-document .tag{font-size:6.3pt;padding:.8mm 1.6mm;margin-top:1.8mm}
+.resume-document.pdf-document .project-bullets{font-size:6.7pt;line-height:1.6;margin-top:1.7mm;gap:.45mm;padding-right:3.2mm}
+.resume-document.pdf-document .resume-project-links{font-size:6.8pt;margin-top:2mm}
+.resume-document.pdf-document .certificate-list{gap:1.2mm}
+.resume-document.pdf-document .certificate-item{font-size:7.7pt;padding:2mm 0;break-inside:avoid-page}
+.resume-document.pdf-document .certificate-item p,.resume-document.pdf-document .certificate-item a{font-size:7.1pt}
+.resume-document.pdf-document .chip-list{gap:1.5mm}
+.resume-document.pdf-document .resume-chip{font-size:7pt;padding:1.1mm 2.2mm}
+.resume-document.pdf-document.theme-minimal .resume-layout{grid-template-columns:1fr}
+.resume-document.pdf-document.theme-minimal .resume-sidebar{display:grid;grid-template-columns:38mm 1fr;padding:8mm 10mm;gap:6mm}
+.resume-document.pdf-document.theme-minimal .resume-side-content{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2mm 6mm}
+.resume-document.pdf-document.theme-minimal .resume-main{padding:9mm 11mm}
+@media print{a{color:inherit;text-decoration:none}.resume-toolbar,.preview-banner{display:none!important}}
+</style>
+</head>
+<body>
+{% include 'resumes/_resume_document.html' with pdf_mode=True %}
+</body>
+</html>

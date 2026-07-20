@@ -1,0 +1,29 @@
+{% load static %}
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="رزومه‌ساز آنلاین؛ ساخت، انتشار و دانلود رزومه حرفه‌ای">
+    <title>{% block title %}رزومه‌ساز{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block css_files %}{% endblock %}
+    <script defer src="{% static 'js/base.js' %}"></script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    {% include 'components/header.html' %}
+    {% if messages %}
+        <div class="message-stack" aria-live="polite">
+            {% for message in messages %}
+                <div class="message message-{{ message.tags|default:'info' }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <main class="site-main">{% block content %}{% endblock %}</main>
+    {% include 'components/footer.html' %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

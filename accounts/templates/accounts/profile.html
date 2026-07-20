@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}تنظیمات حساب{% endblock %}
+{% block content %}
+<div class="container page-shell"><div class="page-heading"><div><span class="eyebrow">حساب کاربری</span><h1>تنظیمات حساب</h1><p>این اطلاعات مربوط به حساب است؛ اطلاعات هر رزومه جداگانه ذخیره می‌شود.</p></div><a class="btn" href="{% url 'resumes:dashboard' %}">بازگشت به داشبورد</a></div>
+<form method="post" enctype="multipart/form-data" class="surface card">{% csrf_token %}{% if account_form.non_field_errors or profile_form.non_field_errors %}<div class="form-errors">{{ account_form.non_field_errors }}{{ profile_form.non_field_errors }}</div>{% endif %}<h2 class="section-title">اطلاعات ورود و تماس</h2><div class="form-grid">{% for field in account_form %}<div class="field"><label>{{ field.label }}</label>{{ field }}{{ field.errors }}</div>{% endfor %}</div><div class="divider"></div><h2 class="section-title">پروفایل حساب</h2><div class="form-grid">{% for field in profile_form %}<div class="field {% if field.name == 'bio' %}field-full{% endif %}"><label>{{ field.label }}</label>{{ field }}{{ field.errors }}</div>{% endfor %}</div><div class="button-row" style="margin-top:24px"><button class="btn btn-primary" type="submit">ذخیره تنظیمات</button></div></form></div>
+{% endblock %}

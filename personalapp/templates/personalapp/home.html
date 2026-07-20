@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}ResumeLab | رزومه‌ساز آنلاین{% endblock %}
+{% block css_files %}<link rel="stylesheet" href="{% static 'css/home.css' %}">{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="container hero-grid">
+        <div>
+            <span class="eyebrow">رزومه‌ساز و ویترین حرفه‌ای آنلاین</span>
+            <h1>رزومه‌ات را <span class="gradient-text">بساز، منتشر کن، دیده شو.</span></h1>
+            <p class="hero-copy">اطلاعاتت را مرحله‌به‌مرحله وارد کن، قالب دلخواهت را انتخاب کن، PDF حرفه‌ای بگیر و با یک لینک اختصاصی رزومه‌ات را برای همه بفرست.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="{% if request.user.is_authenticated %}{% url 'resumes:create' %}{% else %}{% url 'accounts:register' %}{% endif %}">شروع ساخت رزومه</a>
+                <a class="btn" href="{% url 'resumes:explore' %}">دیدن رزومه‌ها</a>
+            </div>
+            <div class="hero-meta">
+                <div><strong>۳</strong> قالب حرفه‌ای</div>
+                <div><strong>PDF</strong> خروجی استاندارد</div>
+                <div><strong>۱ لینک</strong> برای انتشار</div>
+            </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+            <div class="glow-card">
+                <div class="resume-mock">
+                    <div class="resume-mock-header">
+                        <div class="mock-avatar">R</div>
+                        <div><h3>نام شما</h3><p>عنوان شغلی حرفه‌ای</p></div>
+                    </div>
+                    <div class="mock-section"><div class="mock-section-title"></div><div class="mock-line"></div><div class="mock-line"></div><div class="mock-line short"></div></div>
+                    <div class="mock-section"><div class="mock-section-title"></div><div class="mock-tags"><span></span><span></span><span></span><span></span></div></div>
+                    <div class="mock-section"><div class="mock-section-title"></div><div class="mock-line"></div><div class="mock-line short"></div><div class="mock-line"></div><div class="mock-line"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="container">
+        <div class="section-head"><span class="eyebrow">از فرم تا فایل نهایی</span><h2>همه‌چیز برای یک رزومه کامل</h2><p>معماری پروژه برای چند رزومه، چند زبان، انتشار کنترل‌شده و توسعه قالب‌های بیشتر آماده است.</p></div>
+        <div class="features-grid">
+            <article class="surface feature-card"><div class="feature-icon">✦</div><h3>ساخت مرحله‌ای</h3><p>اطلاعات اصلی، تجربه، تحصیلات، مهارت، پروژه و مدارک را مرحله‌به‌مرحله ذخیره کن.</p></article>
+            <article class="surface feature-card"><div class="feature-icon">◫</div><h3>قالب‌های قابل انتخاب</h3><p>قالب مدرن، مینیمال یا کلاسیک را با رنگ اصلی دلخواهت هماهنگ کن.</p></article>
+            <article class="surface feature-card"><div class="feature-icon">⇩</div><h3>PDF واقعی</h3><p>نسخه A4 با پشتیبانی فارسی، لینک‌های قابل کلیک و طراحی مناسب چاپ دریافت کن.</p></article>
+            <article class="surface feature-card"><div class="feature-icon">⌁</div><h3>لینک عمومی</h3><p>رزومه را خصوصی، فقط با لینک یا عمومی منتشر کن و هر زمان خواستی دسترسی را تغییر بده.</p></article>
+            <article class="surface feature-card"><div class="feature-icon">◎</div><h3>ویترین کاربران</h3><p>فقط با رضایت صاحب رزومه، نسخه عمومی در Explore نمایش داده می‌شود.</p></article>
+            <article class="surface feature-card"><div class="feature-icon">⎘</div><h3>چند نسخه از رزومه</h3><p>برای موقعیت‌های مختلف رزومه‌های جدا بساز یا یک نسخه را کپی و شخصی‌سازی کن.</p></article>
+        </div>
+    </div>
+</section>
+
+{% if featured %}
+<section class="featured-section">
+    <div class="container">
+        <div class="section-head"><span class="eyebrow">رزومه شخصی سازنده</span><h2>نمونه واقعی خروجی پروژه</h2></div>
+        <article class="surface featured-resume">
+            <div class="featured-avatar">{% if featured.avatar %}<img src="{{ featured.avatar.url }}" alt="{{ featured.full_name }}">{% else %}{{ featured.full_name|slice:':1' }}{% endif %}</div>
+            <div class="featured-content">
+                <h2>{{ featured.full_name }}</h2><h3>{{ featured.job_title }}</h3>
+                <p>{{ featured.summary|truncatewords:45 }}</p>
+                <div class="skill-cloud">{% for skill in featured.skills.all|slice:':8' %}<span class="tag">{{ skill.name }}</span>{% endfor %}</div>
+                <div class="button-row"><a class="btn btn-primary" href="{{ featured.get_absolute_url }}">مشاهده رزومه</a><a class="btn" href="{% url 'resumes:pdf' featured.slug %}">دانلود PDF</a></div>
+            </div>
+        </article>
+    </div>
+</section>
+{% endif %}
+
+{% if public_resumes %}
+<section class="public-section">
+    <div class="container">
+        <div class="section-head"><span class="eyebrow">رزومه‌های عمومی</span><h2>افرادی که رزومه‌شان را منتشر کرده‌اند</h2></div>
+        <div class="resume-card-grid">
+            {% for item in public_resumes %}
+            <a class="surface public-card" href="{{ item.get_absolute_url }}">
+                <div class="public-card-top"><div class="mini-avatar">{% if item.avatar %}<img src="{{ item.avatar.url }}" alt="">{% else %}{{ item.full_name|slice:':1' }}{% endif %}</div><div><strong>{{ item.full_name }}</strong><p>{{ item.job_title }}</p></div></div>
+                <p>{{ item.summary|truncatewords:18 }}</p><span class="tag">مشاهده رزومه</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<div class="container"><section class="cta-panel"><h2>رزومه بعدی که دیده می‌شود، رزومه تو باشد.</h2><p>ثبت‌نام کن، اطلاعاتت را وارد کن و در چند مرحله یک رزومه قابل اشتراک و دانلود بساز.</p><a class="btn btn-primary" href="{% if request.user.is_authenticated %}{% url 'resumes:create' %}{% else %}{% url 'accounts:register' %}{% endif %}">ساخت رزومه رایگان</a></section></div>
+{% endblock %}

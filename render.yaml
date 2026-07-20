@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: resumelab
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz/
+    autoDeploy: true
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "0"
+      - key: DJANGO_SECURE_SSL_REDIRECT
+        value: "1"
+      - key: DATABASE_URL
+        sync: false
+      - key: CLOUDINARY_URL
+        sync: false
+      - key: SEED_DEMO
+        value: "1"
+      - key: WEB_CONCURRENCY
+        value: "1"
+      - key: GUNICORN_TIMEOUT
+        value: "120"

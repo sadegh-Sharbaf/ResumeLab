@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}ثبت‌نام | ResumeLab{% endblock %}
+{% block content %}
+<section class="auth-shell"><div class="surface auth-card" style="max-width:680px"><span class="eyebrow">شروع ساخت رزومه</span><h1>ساخت حساب</h1><p class="muted">حداقل ایمیل یا شماره تلفن لازم است.</p>
+<form method="post" novalidate>{% csrf_token %}{% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}<div class="form-grid">{% for field in form %}<div class="field {% if field.name == 'password1' or field.name == 'password2' %}{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<span class="field-help">{{ field.help_text|safe }}</span>{% endif %}{{ field.errors }}</div>{% endfor %}</div><button class="btn btn-primary" style="width:100%;margin-top:22px" type="submit">ساخت حساب و رزومه</button></form><p class="auth-switch">حساب داری؟ <a href="{% url 'accounts:login' %}">وارد شو</a></p></div></section>
+{% endblock %}
